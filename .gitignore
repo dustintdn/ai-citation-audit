@@ -1,0 +1,21 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+
+# Reports (generated output)
+reports/
+
+# Hatch / pytest
+.hatch/
+.pytest_cache/
+.coverage
+htmlcov/
