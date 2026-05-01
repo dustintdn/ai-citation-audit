@@ -56,18 +56,22 @@ class TestMentionPosition:
         assert result.get(BRAND).position == MentionPosition.ABSENT
 
     def test_competitor_ranked_correctly(self):
+        # 4 brands mentioned in order: Acme CRM → FIRST, RivalSoft → TOP_3,
+        # OtherTool → TOP_3, LastPlace → PRESENT (rank 3, zero-indexed)
         text = (
             "Acme CRM is the market leader. "
             "RivalSoft is popular among startups. "
-            "OtherTool is rarely recommended."
+            "OtherTool is also worth considering. "
+            "LastPlace is rarely recommended by anyone."
         )
-        result = _parse(text)
+        result = _parse(text, competitors=["RivalSoft", "OtherTool", "LastPlace"])
         assert result.get("RivalSoft").position == MentionPosition.TOP_3
-        assert result.get("OtherTool").position == MentionPosition.PRESENT
+        assert result.get("OtherTool").position == MentionPosition.TOP_3
+        assert result.get("LastPlace").position == MentionPosition.PRESENT
 
     def test_fuzzy_match_catches_slight_variation(self):
-        # "Acme" without "CRM" should still fuzzy-match "Acme CRM"
-        text = "Many companies prefer Acme for their sales pipeline management."
+        # Hyphenated variant "Acme-CRM" should fuzzy-match "Acme CRM" above threshold
+        text = "Many companies prefer Acme-CRM for their sales pipeline management."
         result = _parse(text)
         assert result.get(BRAND).position != MentionPosition.ABSENT
 

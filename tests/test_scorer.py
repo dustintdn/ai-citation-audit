@@ -132,8 +132,8 @@ class TestAvgPositionScore:
         assert s.avg_position_score == 1.0
         assert s.avg_position_label == "FIRST"
 
-    def test_first_and_absent_averages_to_top3_label(self):
-        # FIRST=1, ABSENT=4 → avg=2.5 → label TOP_3
+    def test_first_and_absent_averages_to_present_label(self):
+        # FIRST=1, ABSENT=4 → avg=2.5 → label PRESENT (> 2.0 threshold)
         prs = [
             _pr("openai", PromptIntent.DISCOVERY, MentionPosition.FIRST, phrasing_index=0),
             _pr("openai", PromptIntent.DISCOVERY, MentionPosition.ABSENT, phrasing_index=1),
@@ -141,7 +141,7 @@ class TestAvgPositionScore:
         results = _score(prs)
         s = results.scores_for(brand=BRAND, model="openai", intent=PromptIntent.DISCOVERY)[0]
         assert s.avg_position_score == 2.5
-        assert s.avg_position_label == "TOP_3"
+        assert s.avg_position_label == "PRESENT"
 
     def test_all_absent_gives_score_4_and_absent_label(self):
         prs = [
