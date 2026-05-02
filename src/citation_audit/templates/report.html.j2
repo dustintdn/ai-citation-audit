@@ -212,6 +212,9 @@
         {% endfor %}
       </tbody>
     </table>
+    {% if scores_by_model[model] | selectattr("intent.value", "equalto", "switching") | list %}
+    <p class="footnote">⚠ <strong>Switching</strong> rows ask "what are the best alternatives to {{ brand }}?" — competitor mention rates reflect positioning <em>against</em> the target brand, not organic visibility. Exclude these rows from share-of-voice comparisons.</p>
+    {% endif %}
   </section>
   {% endfor %}
 
