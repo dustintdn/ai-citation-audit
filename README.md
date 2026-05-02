@@ -5,6 +5,9 @@ A Python CLI that audits how a target brand is mentioned across multiple LLM API
 parses responses for brand and competitor mentions, scores citation quality, and
 outputs a structured audit report.
 
+**Sample analysis:** [AI Visibility Audit — HR & Recruiting Software (2025)](ANALYSIS.md)  
+A full two-run audit of Indeed vs. Greenhouse, Lever, Workday, Rippling, and Gusto across OpenAI and Anthropic.
+
 ---
 
 ## Requirements
