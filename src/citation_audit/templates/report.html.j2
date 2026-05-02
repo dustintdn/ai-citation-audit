@@ -79,6 +79,15 @@
     .badge-top3      { background: #ede9fe; color: #5b21b6; }
     .badge-present   { background: #fef9c3; color: #854d0e; }
     .badge-absent    { background: #f3f4f6; color: #9ca3af; }
+    .badge-switching { background: #fff7ed; color: #9a3412; }
+
+    .row-switching td { color: #6b7280; font-style: italic; }
+
+    .footnote {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
 
     .pct-bar {
       display: flex;
@@ -165,9 +174,15 @@
       </thead>
       <tbody>
         {% for row in scores_by_model[model] %}
-        <tr>
+        <tr{% if row.intent.value == "switching" %} class="row-switching"{% endif %}>
           <td>{{ row.brand }}</td>
-          <td>{{ row.intent.value | title }}</td>
+          <td>
+            {% if row.intent.value == "switching" %}
+              <span class="badge badge-switching">Switching ⚠</span>
+            {% else %}
+              {{ row.intent.value | replace("_", " ") | title }}
+            {% endif %}
+          </td>
           <td>
             <div class="pct-bar">
               <div class="pct-bar-track">

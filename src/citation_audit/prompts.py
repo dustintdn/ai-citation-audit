@@ -1,8 +1,9 @@
 """
 prompts.py — Prompt battery generator.
 
-Generates 6 prompts across 3 intent types (DISCOVERY, COMPARISON, RECOMMENDATION),
-2 phrasings each, interpolated with brand, industry, and use_case context.
+Generates 14 prompts across 7 intent types (DISCOVERY, COMPARISON, RECOMMENDATION,
+PROBLEM_FIRST, SWITCHING, PERSONA, FEATURE_LED), 2 phrasings each, interpolated
+with brand, industry, and use_case context.
 """
 
 from dataclasses import dataclass
@@ -13,6 +14,10 @@ class PromptIntent(str, Enum):
     DISCOVERY = "discovery"
     COMPARISON = "comparison"
     RECOMMENDATION = "recommendation"
+    PROBLEM_FIRST = "problem_first"
+    SWITCHING = "switching"
+    PERSONA = "persona"
+    FEATURE_LED = "feature_led"
 
 
 @dataclass(frozen=True)
@@ -49,6 +54,42 @@ _TEMPLATES: list[tuple[PromptIntent, str]] = [
     (
         PromptIntent.RECOMMENDATION,
         "What do most {industry} professionals use for {use_case}?",
+    ),
+    # PROBLEM_FIRST
+    (
+        PromptIntent.PROBLEM_FIRST,
+        "Our team is struggling with {use_case}. What tools do people use to solve this?",
+    ),
+    (
+        PromptIntent.PROBLEM_FIRST,
+        "We're having trouble managing {use_case}. What software would you recommend?",
+    ),
+    # SWITCHING
+    (
+        PromptIntent.SWITCHING,
+        "What are the best alternatives to {brand} for {use_case}?",
+    ),
+    (
+        PromptIntent.SWITCHING,
+        "We're looking to move away from our current {industry} tool. What should we consider?",
+    ),
+    # PERSONA
+    (
+        PromptIntent.PERSONA,
+        "I'm an operations manager evaluating {industry} tools for a growing startup. What are the top options?",
+    ),
+    (
+        PromptIntent.PERSONA,
+        "As a team lead looking for {use_case} software, what would you suggest?",
+    ),
+    # FEATURE_LED
+    (
+        PromptIntent.FEATURE_LED,
+        "What {industry} platforms are known for the best reporting and analytics?",
+    ),
+    (
+        PromptIntent.FEATURE_LED,
+        "Which {industry} tools are easiest to onboard a new team onto?",
     ),
 ]
 

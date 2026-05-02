@@ -12,6 +12,7 @@ re-querying APIs.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 from abc import ABC, abstractmethod
@@ -22,6 +23,10 @@ from anthropic import AsyncAnthropic
 from openai import AsyncOpenAI
 
 from citation_audit.prompts import Prompt
+
+# Max simultaneous in-flight requests per provider. Anthropic enforces a strict
+# concurrent-connection limit; 3 is conservative enough to avoid 429s.
+_DEFAULT_CONCURRENCY = 3
 
 # ---------------------------------------------------------------------------
 # Types
@@ -73,19 +78,22 @@ class LLMClient(ABC):
 
     name: ModelName  # must be set by subclasses
 
-    def __init__(self, raw_dir: Path) -> None:
+    def __init__(self, raw_dir: Path, concurrency: int = _DEFAULT_CONCURRENCY) -> None:
         self.raw_dir = raw_dir
+        self._semaphore = asyncio.Semaphore(concurrency)
 
     async def query(self, prompt: Prompt, prompt_index: int) -> str:
         """
         Return the model response for *prompt*, using the on-disk cache if
-        a response was already fetched.
+        a response was already fetched. Concurrent calls are throttled by a
+        per-client semaphore to avoid provider rate limits.
         """
         cached = _load_cached(self.raw_dir, self.name, prompt_index)
         if cached is not None:
             return cached
 
-        response = await self._complete(prompt.text)
+        async with self._semaphore:
+            response = await self._complete(prompt.text)
         _save_cache(self.raw_dir, self.name, prompt_index, prompt.text, response)
         return response
 

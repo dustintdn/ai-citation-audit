@@ -1,0 +1,5 @@
+AI Citation Audit — 5-run series started
+Brand: Indeed | Industry: HR and recruiting software
+Models: openai,anthropic,perplexity | Runs: 5 | Interval: 1800s
+Use case: evaluating and hiring full-time employees at a mid-sized company
+---
