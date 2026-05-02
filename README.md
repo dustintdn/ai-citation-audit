@@ -6,7 +6,7 @@ parses responses for brand and competitor mentions, scores citation quality, and
 outputs a structured audit report.
 
 **Sample analysis:** [AI Visibility Audit — HR & Recruiting Software (2025)](ANALYSIS.md)  
-A full two-run audit of Indeed vs. Greenhouse, Lever, Workday, Rippling, and Gusto across OpenAI and Anthropic.
+A 5-run, 3-model audit (210 responses) of Indeed vs. Greenhouse, Lever, Workday, Rippling, and Gusto across OpenAI GPT-5.4, Anthropic Claude Sonnet 4.6, and Perplexity Sonar Pro.
 
 ---
 

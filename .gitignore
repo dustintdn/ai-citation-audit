@@ -14,9 +14,8 @@ build/
 .venv/
 venv/
 
-# Reports and run logs (generated output)
+# Reports (generated output — raw API responses, HTML/CSV/JSON)
 reports/
-run_log.txt
 
 # Hatch / pytest
 .hatch/

@@ -1,0 +1,17 @@
+AI Citation Audit — 5-run series started
+Brand: Indeed | Industry: HR and recruiting software
+Models: openai (gpt-5.4), anthropic (claude-sonnet-4-6), perplexity (sonar-pro)
+Runs: 5 | Interval: 1800s
+Use case: evaluating and hiring full-time employees at a mid-sized company
+---
+[run_1] START  2026-05-02T06:27:38Z
+[run_1] END    2026-05-02T06:29:33Z  status=OK
+[run_2] START  2026-05-02T07:07:53Z
+[run_2] END    2026-05-02T07:09:46Z  status=OK
+[run_3] START  2026-05-02T07:40:03Z
+[run_3] END    2026-05-02T07:42:15Z  status=OK
+[run_4] START  2026-05-02T08:13:04Z
+[run_4] END    2026-05-02T08:15:11Z  status=OK
+[run_5] START  2026-05-02T08:46:04Z
+[run_5] END    2026-05-02T08:47:53Z  status=OK
+--- All 5 runs complete.
