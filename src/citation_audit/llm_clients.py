@@ -109,7 +109,7 @@ class LLMClient(ABC):
 class OpenAIClient(LLMClient):
     name: ModelName = "openai"
 
-    def __init__(self, raw_dir: Path, model: str = "gpt-4o") -> None:
+    def __init__(self, raw_dir: Path, model: str = "gpt-5.4") -> None:
         super().__init__(raw_dir)
         self._model = model
         self._client = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
