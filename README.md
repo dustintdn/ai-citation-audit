@@ -77,6 +77,18 @@ Raw API responses are cached to `<output-dir>/raw/`. Delete that directory (or
 specific files) to force a fresh query. Subsequent runs with the same flags will
 parse and re-score from cache instantly.
 
+### Multi-run / longitudinal audits
+
+`run_audit.sh` runs the full audit battery multiple times, spaced apart, to capture
+temporal variance in LLM responses. Edit the variables at the top of the script to
+configure brand, competitors, models, number of runs, and wait interval. Each run
+writes to its own subdirectory (`reports/run_1/`, `reports/run_2/`, etc.) and logs
+start/end times and exit status to `run_log.txt`.
+
+```bash
+bash run_audit.sh
+```
+
 ---
 
 ## Output files
@@ -122,7 +134,7 @@ tests/test_scorer.py ............                              [100%]
 ```
 src/citation_audit/
 ├── cli.py          # Typer entry point; orchestrates the full audit pipeline
-├── prompts.py      # Prompt battery generator (6 prompts × 3 intents)
+├── prompts.py      # Prompt battery generator (14 prompts × 7 intents)
 ├── llm_clients.py  # Abstract LLMClient + OpenAI / Anthropic / Perplexity impls
 ├── parser.py       # Fuzzy mention detection, position ranking, sentiment heuristics
 ├── scorer.py       # Aggregates parsed results into per-(brand × model × intent) scores
@@ -142,11 +154,35 @@ src/citation_audit/
 
 ## Scoring reference
 
-| Position label | Meaning |
+### Prompt intents
+
+Each audit fires 2 prompt phrasings per intent, for 14 prompts total per model run.
+
+| Intent | What it tests |
+|---|---|
+| `discovery` | Generic category-level queries ("best tools for X") |
+| `comparison` | Head-to-head framing against competitors |
+| `recommendation` | "Pick one" and professional-consensus queries |
+| `problem_first` | Pain-point framing — how users describe problems, not categories |
+| `persona` | Persona-specific queries (startup ops manager, team lead) |
+| `feature_led` | Capability-first queries (reporting, onboarding ease) |
+| `switching` | "Alternatives to {brand}" — see methodology note below |
+
+> **Switching intent:** these prompts explicitly frame the target brand as the thing being replaced, so competitor mentions reflect positioning *against* the brand rather than organic visibility. Do not include `switching` rows in share-of-voice aggregates.
+
+### Output metrics
+
+| Metric | Range | Meaning |
+|---|---|---|
+| `mention_rate` | 0–1 | Fraction of prompts where the brand appeared (not ABSENT). Higher is better. |
+| `avg_position_score` | 1–4 | Mean numeric rank: 1=FIRST, 2=TOP\_3, 3=PRESENT, 4=ABSENT. Lower is better. |
+| `avg_position_label` | — | `avg_position_score` bucketed: ≤1=FIRST, ≤2=TOP\_3, ≤3=PRESENT, >3=ABSENT |
+
+### Position labels
+
+| Label | Meaning |
 |---|---|
 | `FIRST` | Brand's first mention precedes all other tracked brands |
 | `TOP_3` | Brand is within the first 3 brands mentioned |
 | `PRESENT` | Brand is mentioned but outside the top 3 |
 | `ABSENT` | Brand not detected in the response |
-
-`avg_position_score` is the numeric mean across prompts (1=FIRST, 2=TOP\_3, 3=PRESENT, 4=ABSENT). Lower is better.

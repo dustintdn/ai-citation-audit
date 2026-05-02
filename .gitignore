@@ -14,8 +14,9 @@ build/
 .venv/
 venv/
 
-# Reports (generated output)
+# Reports and run logs (generated output)
 reports/
+run_log.txt
 
 # Hatch / pytest
 .hatch/
